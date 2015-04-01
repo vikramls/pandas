@@ -1295,6 +1295,65 @@ class StringMethods(object):
         result = _na_map(f, self.series)
         return self._wrap_result_expand(result, expand=expand)
 
+    _shared_docs['str_partition'] = ("""
+    Split the string at the %(side)s occurrence of `sep`, and return 3 elements
+    containing the part before the separator, the separator itself,
+    and the part after the separator.
+    If the separator is not found, return %(return)s.
+
+    Parameters
+    ----------
+    pat : string, default whitespace
+        String to split on.
+    expand : bool, default True
+        * If True, return DataFrame/MultiIndex expanding dimensionality.
+        * If False, return Series/Index
+
+    Returns
+    -------
+    split : DataFrame/MultiIndex or Series/Index of objects
+
+    See Also
+    --------
+    %(also)s
+
+    Examples
+    --------
+
+    >>> s = Series(['A_B_C', 'D_E_F', 'X'])
+    0    A_B_C
+    1    D_E_F
+    2        X
+    dtype: object
+
+    >>> s.str.partition('_')
+       0  1    2
+    0  A  _  B_C
+    1  D  _  E_F
+    2  X
+
+    >>> s.str.rpartition('_')
+         0  1  2
+    0  A_B  _  C
+    1  D_E  _  F
+    2          X
+    """)
+    @Appender(_shared_docs['str_partition'] % {'side': 'first',
+        'return': '3 elements containing the string itself, followed by two empty strings',
+        'also': 'rpartition : Split the string at the last occurrence of `sep`'})
+    def partition(self, pat=' ', expand=True):
+        f = lambda x: x.partition(pat)
+        result = _na_map(f, self.series)
+        return self._wrap_result_expand(result, expand=expand)
+
+    @Appender(_shared_docs['str_partition'] % {'side': 'last',
+        'return': '3 elements containing two empty strings, followed by the string itself',
+        'also': 'partition : Split the string at the first occurrence of `sep`'})
+    def rpartition(self, pat=' ', expand=True):
+        f = lambda x: x.rpartition(pat)
+        result = _na_map(f, self.series)
+        return self._wrap_result_expand(result, expand=expand)
+
     @copy(str_get)
     def get(self, i):
         result = str_get(self.series, i)
