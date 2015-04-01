@@ -713,6 +713,12 @@ class TestStringMethods(tm.TestCase):
         tm.assert_frame_equal(empty_df, empty.str.partition('a'))
         tm.assert_frame_equal(empty_df, empty.str.rpartition('a'))
 
+    def test_empty_str_methods_to_frame(self):
+        empty_str = empty = Series(dtype=str)
+        empty_df = DataFrame([])
+        tm.assert_frame_equal(empty_df, empty.str.partition('a'))
+        tm.assert_frame_equal(empty_df, empty.str.rpartition('a'))
+
     def test_ismethods(self):
         values = ['A', 'b', 'Xy', '4', '3A', '', 'TT', '55', '-', '  ']
         str_s = Series(values)
